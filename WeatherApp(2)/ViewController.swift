@@ -15,22 +15,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet var table: UITableView!
     
     @IBOutlet weak var searchText: UITextField!
+    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var weatherConditionLabel: UILabel!
+    @IBOutlet weak var tempLabel: UILabel!
     var models = [Weather]()
     
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation?
-    
+    var tempC = "0";
+    var tempF = "0";
     override func viewDidLoad() {
         super.viewDidLoad()
 //        print("hello?")
         setupLocation()
-        
-        table.register(WeatherTableViewCell.nib(), forCellReuseIdentifier: WeatherTableViewCell.identifier)
-        
-        table.delegate = self
-        table.dataSource = self
     }
     
+    @IBAction func currentLocationBtn(_ sender: Any) {
+    }
+    @IBAction func searchBtn(_ sender: Any) {
+    }
     @IBAction func search(_ sender: Any) {
     
         let text = (searchText.text?.lowercased())!.replacingOccurrences(of: " ", with: "_")
@@ -38,7 +41,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         print(url)
         
-        URLSession.shared.dataTask(with: URL(string: url)!,completionHandler: {data, response, error in
+        
+        URLSession.shared.dataTask(with: URL(string: url)!,completionHandler: { [self]data, response, error in
             guard let data = data, error == nil else {
                 print("something went wrong")
                 return
@@ -56,8 +60,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 return
             }
             
-            print(result)
+            tempC = String(result.current.temp_c)
+            print(tempC)
         }).resume()
+        
+        print("temp: \(tempC)")
+        if tempC != "0" {
+            tempLabel.text = tempC
+        }
+        
     }
     
     //Location
@@ -68,9 +79,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print(locationManager)
         print("setting up location . . .")
     }
-    
-
-    
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if !locations.isEmpty, currentLocation == nil {
@@ -120,7 +128,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 return
             }
             
-            print(result)
+            print("result")
+            print(result.current.temp_c)
         }).resume()
     }
  
