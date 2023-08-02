@@ -65,9 +65,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }).resume()
         
         print("temp: \(tempC)")
-        if tempC != "0" {
-            tempLabel.text = tempC
-        }
+        tempLabel.text = tempC
         
     }
     
