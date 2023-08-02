@@ -32,19 +32,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @IBAction func search(_ sender: Any) {
-        print(searchText.text)
-        let text1 = searchText.text?.lowercased()
-        let text2 = text1!.replacingOccurrences(of: " ", with: "_")
-        let url = "https://api.weatherapi.com/v1/current.json?key=2e5069421ef94f68bc4235330233107&q=\(String(text2))"
+    
+        let text = (searchText.text?.lowercased())!.replacingOccurrences(of: " ", with: "_")
+        let url = "https://api.weatherapi.com/v1/current.json?key=2e5069421ef94f68bc4235330233107&q=\(String(text))"
         
         print(url)
         
         URLSession.shared.dataTask(with: URL(string: url)!,completionHandler: {data, response, error in
-            
-            //validation
-            //convert data to models/some object
-            //update user interface
-            print("here????")
             guard let data = data, error == nil else {
                 print("something went wrong")
                 return
@@ -65,9 +59,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             print(result)
         }).resume()
     }
+    
     //Location
     func setupLocation() {
-        
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
@@ -79,7 +73,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
         if !locations.isEmpty, currentLocation == nil {
             currentLocation = locations.last
             print("???? \(locations)")
@@ -162,5 +155,6 @@ struct Current: Codable {
 
 struct Condition:  Codable {
     let text: String
+    let code: Int
 }
 
