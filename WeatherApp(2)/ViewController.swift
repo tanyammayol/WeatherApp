@@ -10,10 +10,11 @@ import CoreLocation
 import MapKit
 
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate {
+class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDelegate {
 
-    @IBOutlet var table: UITableView!
+//    @IBOutlet var table: UITableView!
     
+    @IBOutlet weak var tempUnit: UISegmentedControl!
     @IBOutlet weak var searchText: UITextField!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var weatherConditionLabel: UILabel!
@@ -22,12 +23,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation?
-    var tempC = "0";
+    var tempC = "10";
     var tempF = "0";
     override func viewDidLoad() {
         super.viewDidLoad()
 //        print("hello?")
         setupLocation()
+        
+//        table.register(WeatherTableViewCell.nib(), forCellReuseIdentifier: WeatherTableViewCell.identifier)
+        
+//        table.delegate = self
+//        table.dataSource = self
     }
     
     @IBAction func currentLocationBtn(_ sender: Any) {
@@ -42,7 +48,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print(url)
         
         
-        URLSession.shared.dataTask(with: URL(string: url)!,completionHandler: { [self]data, response, error in
+        let task = URLSession.shared.dataTask(with: URL(string: url)!,completionHandler: { [self]data, response, error in
             guard let data = data, error == nil else {
                 print("something went wrong")
                 return
@@ -59,13 +65,35 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             guard let result = json else {
                 return
             }
+     
+//            let entries = result
+            self.models.append(result)
             
-            tempC = String(result.current.temp_c)
-            print(tempC)
-        }).resume()
+      
+            DispatchQueue.main.async {
+//                self.table.reloadData()
+                
+                print("hi:  \(tempLabel)")
+                if(tempUnit.selectedSegmentIndex == 0) {
+                    print("Celsius")
+                    let temp = Int(result.current.temp_c)
+                    self.tempLabel.text = String(temp)
+                }
+                else {
+                    print("fahrenheit")
+                    let temp = Int(result.current.temp_f)
+                    self.tempLabel.text = String(temp)
+                }
+                
+            }
+            
+            
+            
+        })
+        task.resume()
         
-        print("temp: \(tempC)")
-        tempLabel.text = tempC
+        tempLabel.text = "10"
+        
         
     }
     
@@ -133,13 +161,33 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
  
  
     //Table
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return models.count
-    }
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        print(models.count)
+//        return models.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        print("table view")
+//        let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath) as! WeatherTableViewCell
+//
+//        cell.configure(with: models[indexPath.row])
+//        return cell
+//    }
+//
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
+        if segue.identifier == "tableSegue"{
+            let destination = segue.destination as! TableViewController
+    //        destination.userId = userId
+    //        destination.email = email
+            destination.tempC = tempC
+            destination.tempF = tempF
+            destination.models = models
+        }
     }
+
+    
 }
 
 struct Weather: Codable {
@@ -164,4 +212,5 @@ struct Condition:  Codable {
     let text: String
     let code: Int
 }
+
 
