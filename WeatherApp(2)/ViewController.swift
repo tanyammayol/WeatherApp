@@ -21,6 +21,10 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
     @IBOutlet weak var tempLabel: UILabel!
     
     let locationManager = CLLocationManager()
+    var searchedCitiesWeather: [weatherResponse] = []
+    
+    var isFahrenheit = false
+    var clickCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,10 +41,11 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
+        print("Latitude: \(location.coordinate.latitude), Longitude: \(location.coordinate.longitude)")
+
         // Fetch weather data using location coordinates
         loadWeather(search: "\(location.coordinate.latitude),\(location.coordinate.longitude)")
     }
-
 
             func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
                 print("Failed to get location: \(error.localizedDescription)")
@@ -51,9 +56,30 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
     @IBAction func searchBtn(_ sender: Any) {
         loadWeather(search: searchText.text)
     }
-    @IBAction func search(_ sender: Any) {
-        
+    @IBAction func searchCities(_ sender: Any) {
+        if let searchQuery = searchText.text {
+            loadWeather(search: searchQuery)
+                   performSegue(withIdentifier: "ShowCitiesListSegue", sender: nil)
+               }
+               searchText.resignFirstResponder()
     }
+    @IBAction func tempControl(_ sender: UISegmentedControl) {
+        clickCount += 1
+        
+        if sender.selectedSegmentIndex == 0 {
+            isFahrenheit = false
+        } else {
+            isFahrenheit = true
+        }
+        loadWeather(search: searchText.text)
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == "ShowCitiesListSegue" {
+                if let citiesListVC = segue.destination as? CitiesListViewController {
+                    citiesListVC.searchedCitiesWeather = searchedCitiesWeather
+                }
+            }
+        }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
         print(textField.text ?? "")
@@ -62,6 +88,7 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
         return true
         
     }
+    
     //Location
     private func loadWeather(search: String?){
         guard let search = search else{
@@ -94,9 +121,25 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
                 
                 DispatchQueue.main.sync {
                     self.cityLabel.text = weatherResponse.location.name
-                    self.tempLabel.text = "\(weatherResponse.current.temp_c)C"
+                    if self.isFahrenheit {
+                        print(weatherResponse.current.temp_f)
+                        self.tempLabel.text = "\(weatherResponse.current.temp_f)F"
+                    } else {
+                        print(weatherResponse.current.temp_c)
+                        self.tempLabel.text = "\(weatherResponse.current.temp_c)C"
+                    }
                     self.weatherConditionLabel.text = weatherResponse.current.condition.text
+                    
 //                    self.image1.image = weatherResponse.current.condition.code.image
+                    let existingCity = self.searchedCitiesWeather.first { city in
+                                        return city.location.name == weatherResponse.location.name
+                                    }
+
+                                    // If the city does not exist in the array, add it
+                                    if existingCity == nil {
+                                        self.searchedCitiesWeather.append(weatherResponse)
+                                    }
+                                  
                 }
             }
         }

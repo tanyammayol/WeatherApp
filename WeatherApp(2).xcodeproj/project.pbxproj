@@ -14,8 +14,7 @@
 		ABF38EDE2A787CF600918B79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABF38EDD2A787CF600918B79 /* Assets.xcassets */; };
 		ABF38EE12A787CF600918B79 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABF38EDF2A787CF600918B79 /* LaunchScreen.storyboard */; };
 		ABF38EEB2A787D1800918B79 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF38EE92A787D1800918B79 /* WeatherTableViewCell.swift */; };
-		ABF38EEC2A787D1800918B79 /* WeatherTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ABF38EEA2A787D1800918B79 /* WeatherTableViewCell.xib */; };
-		ABF38EF42A79DDAE00918B79 /* Main1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABF38EF22A79DDAE00918B79 /* Main1.storyboard */; };
+		EC629A9D2A7CB6EC00533FEF /* CitiesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC629A9B2A7CB6EC00533FEF /* CitiesListViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +27,7 @@
 		ABF38EE02A787CF600918B79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ABF38EE22A787CF600918B79 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABF38EE92A787D1800918B79 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
-		ABF38EEA2A787D1800918B79 /* WeatherTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeatherTableViewCell.xib; sourceTree = "<group>"; };
-		ABF38EF32A79DDAE00918B79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main1.storyboard; sourceTree = "<group>"; };
+		EC629A9B2A7CB6EC00533FEF /* CitiesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +64,8 @@
 				ABF38ED42A787CF500918B79 /* AppDelegate.swift */,
 				ABF38ED62A787CF500918B79 /* SceneDelegate.swift */,
 				ABF38ED82A787CF500918B79 /* ViewController.swift */,
-				ABF38EF22A79DDAE00918B79 /* Main1.storyboard */,
+				ABF38EE92A787D1800918B79 /* WeatherTableViewCell.swift */,
+				EC629A9B2A7CB6EC00533FEF /* CitiesListViewController.swift */,
 				ABF38EDA2A787CF500918B79 /* Main.storyboard */,
 				ABF38EDD2A787CF600918B79 /* Assets.xcassets */,
 				ABF38EDF2A787CF600918B79 /* LaunchScreen.storyboard */,
@@ -78,8 +77,6 @@
 		ABF38EE82A787D0500918B79 /* WeatherCell */ = {
 			isa = PBXGroup;
 			children = (
-				ABF38EE92A787D1800918B79 /* WeatherTableViewCell.swift */,
-				ABF38EEA2A787D1800918B79 /* WeatherTableViewCell.xib */,
 			);
 			path = WeatherCell;
 			sourceTree = "<group>";
@@ -142,8 +139,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABF38EF42A79DDAE00918B79 /* Main1.storyboard in Resources */,
-				ABF38EEC2A787D1800918B79 /* WeatherTableViewCell.xib in Resources */,
 				ABF38EE12A787CF600918B79 /* LaunchScreen.storyboard in Resources */,
 				ABF38EDE2A787CF600918B79 /* Assets.xcassets in Resources */,
 				ABF38EDC2A787CF500918B79 /* Main.storyboard in Resources */,
@@ -161,6 +156,7 @@
 				ABF38ED92A787CF500918B79 /* ViewController.swift in Sources */,
 				ABF38ED52A787CF500918B79 /* AppDelegate.swift in Sources */,
 				ABF38ED72A787CF500918B79 /* SceneDelegate.swift in Sources */,
+				EC629A9D2A7CB6EC00533FEF /* CitiesListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,14 +177,6 @@
 				ABF38EE02A787CF600918B79 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		ABF38EF22A79DDAE00918B79 /* Main1.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				ABF38EF32A79DDAE00918B79 /* Base */,
-			);
-			name = Main1.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
