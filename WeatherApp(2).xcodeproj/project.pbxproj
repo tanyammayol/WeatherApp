@@ -60,7 +60,6 @@
 		ABF38ED32A787CF500918B79 /* WeatherApp(2) */ = {
 			isa = PBXGroup;
 			children = (
-				ABF38EE82A787D0500918B79 /* WeatherCell */,
 				ABF38ED42A787CF500918B79 /* AppDelegate.swift */,
 				ABF38ED62A787CF500918B79 /* SceneDelegate.swift */,
 				ABF38ED82A787CF500918B79 /* ViewController.swift */,
@@ -72,13 +71,6 @@
 				ABF38EE22A787CF600918B79 /* Info.plist */,
 			);
 			path = "WeatherApp(2)";
-			sourceTree = "<group>";
-		};
-		ABF38EE82A787D0500918B79 /* WeatherCell */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = WeatherCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

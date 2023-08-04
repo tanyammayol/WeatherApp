@@ -26,8 +26,21 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
     var isFahrenheit = false
     var clickCount = 0
     
+    let imageview: UIImageView = {
+        let imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
+        imageview.contentMode = .scaleAspectFit
+        return imageview
+        
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(imageview)
+        imageview.center = CGPoint(x: 200, y: 240)
+        let customColor = UIColor(red: 101/255, green: 94/255, blue: 176/255, alpha: 1.0)
+        
+        let config = UIImage.SymbolConfiguration(paletteColors: [customColor, .white])
+        imageview.preferredSymbolConfiguration = config
+        
         searchText.delegate = self
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -52,6 +65,69 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
             }
     
 
+    func loadWeatherSymbol(for condition: String) {
+        DispatchQueue.main.async {
+            let symbolName = self.getWeatherSymbolName(for: condition)
+            self.imageview.image = UIImage(systemName: symbolName)
+        }
+    }
+    
+    func getWeatherSymbolName(for condition: String) -> String {
+        let cleanedCondition = condition.lowercased().trimmingCharacters(in: .whitespaces)
+        let weatherSymbols: [String: String] = [
+            "sunny": "sun.max",
+            "partly cloudy": "cloud.sun",
+            "cloudy": "cloud",
+            "overcast": "smoke",
+            "mist": "cloud.fog",
+            "patchy rain possible": "cloud.drizzle",
+            "patchy snow possible": "cloud.snow",
+            "patchy sleet possible": "cloud.sleet",
+            "patchy freezing drizzle possible": "cloud.drizzle",
+            "thundery outbreaks possible": "cloud.bolt.rain",
+            "blowing snow": "wind.snow",
+            "blizzard": "wind.snow",
+            "fog": "cloud.fog",
+            "freezing fog": "cloud.fog",
+            "patchy light drizzle": "cloud.drizzle",
+            "light drizzle": "cloud.drizzle",
+            "freezing drizzle": "cloud.drizzle",
+            "heavy freezing drizzle": "cloud.hail",
+            "patchy light rain": "cloud.drizzle",
+            "light rain": "cloud.rain",
+            "moderate rain at times": "cloud.rain",
+            "moderate rain": "cloud.rain",
+            "heavy rain at times": "cloud.rain",
+            "heavy rain": "cloud.rain",
+            "light freezing rain": "cloud.hail",
+            "moderate or heavy freezing rain": "cloud.hail",
+            "light sleet": "cloud.sleet",
+            "moderate or heavy sleet": "cloud.sleet",
+            "patchy light snow": "cloud.snow",
+            "light snow": "cloud.snow",
+            "patchy moderate snow": "cloud.snow",
+            "moderate snow": "cloud.snow",
+            "patchy heavy snow": "cloud.snow",
+            "heavy snow": "cloud.snow",
+            "ice pellets": "cloud.hail",
+            "light rain shower": "cloud.drizzle",
+            "moderate or heavy rain shower": "cloud.rain",
+            "torrential rain shower": "cloud.heavyrain",
+            "light sleet showers": "cloud.sleet",
+            "moderate or heavy sleet showers": "cloud.sleet",
+            "light snow showers": "cloud.snow",
+            "moderate or heavy snow showers": "cloud.snow",
+            "light showers of ice pellets": "cloud.hail",
+            "moderate or heavy showers of ice pellets": "cloud.hail",
+            "patchy light rain with thunder": "cloud.bolt.rain",
+            "moderate or heavy rain with thunder": "cloud.bolt.rain",
+            "patchy light snow with thunder": "cloud.bolt.snow",
+            "moderate or heavy snow with thunder": "cloud.bolt.snow",
+            "clear": "sun.min"
+        ]
+        
+        return weatherSymbols[cleanedCondition] ?? "questionmark"
+    }
 
     @IBAction func searchBtn(_ sender: Any) {
         loadWeather(search: searchText.text)
@@ -84,7 +160,6 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
         textField.endEditing(true)
         print(textField.text ?? "")
         loadWeather(search: searchText.text)
-       
         return true
         
     }
@@ -180,6 +255,7 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
 struct weatherResponse: Decodable {
     let location: Location
     let current: weather
+    let isFahrenheit: Bool = false
 }
 struct Location: Decodable {
     let name: String
