@@ -10,7 +10,7 @@ import CoreLocation
 import MapKit
 
 
-class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate {
 
 //    @IBOutlet var table: UITableView!
     
@@ -19,198 +19,134 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var weatherConditionLabel: UILabel!
     @IBOutlet weak var tempLabel: UILabel!
-    var models = [Weather]()
     
     let locationManager = CLLocationManager()
-    var currentLocation: CLLocation?
-    var tempC = "10";
-    var tempF = "0";
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print("hello?")
-        setupLocation()
-        
-//        table.register(WeatherTableViewCell.nib(), forCellReuseIdentifier: WeatherTableViewCell.identifier)
-        
-//        table.delegate = self
-//        table.dataSource = self
+        searchText.delegate = self
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
     }
     
     @IBAction func currentLocationBtn(_ sender: Any) {
+        locationManager.requestLocation()
+            }
+
+            // MARK: - CLLocationManagerDelegate
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        // Fetch weather data using location coordinates
+        loadWeather(search: "\(location.coordinate.latitude),\(location.coordinate.longitude)")
     }
+
+
+            func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+                print("Failed to get location: \(error.localizedDescription)")
+            }
+    
+
+
     @IBAction func searchBtn(_ sender: Any) {
+        loadWeather(search: searchText.text)
     }
     @IBAction func search(_ sender: Any) {
-    
-        let text = (searchText.text?.lowercased())!.replacingOccurrences(of: " ", with: "_")
-        let url = "https://api.weatherapi.com/v1/current.json?key=2e5069421ef94f68bc4235330233107&q=\(String(text))"
-        
-        print(url)
-        
-        
-        let task = URLSession.shared.dataTask(with: URL(string: url)!,completionHandler: { [self]data, response, error in
-            guard let data = data, error == nil else {
-                print("something went wrong")
-                return
-            }
-            
-            var json: Weather?
-            do{
-                json = try JSONDecoder().decode(Weather.self, from: data)
-            }
-            catch {
-                print("error \(error)")
-            }
-            
-            guard let result = json else {
-                return
-            }
-     
-//            let entries = result
-            self.models.append(result)
-            
-      
-            DispatchQueue.main.async {
-//                self.table.reloadData()
-                
-                print("hi:  \(tempLabel)")
-                if(tempUnit.selectedSegmentIndex == 0) {
-                    print("Celsius")
-                    let temp = Int(result.current.temp_c)
-                    self.tempLabel.text = String(temp)
-                }
-                else {
-                    print("fahrenheit")
-                    let temp = Int(result.current.temp_f)
-                    self.tempLabel.text = String(temp)
-                }
-                
-            }
-            
-            
-            
-        })
-        task.resume()
-        
-        tempLabel.text = "10"
-        
         
     }
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        print(textField.text ?? "")
+        loadWeather(search: searchText.text)
+       
+        return true
+        
+    }
     //Location
-    func setupLocation() {
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-        print(locationManager)
-        print("setting up location . . .")
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if !locations.isEmpty, currentLocation == nil {
-            currentLocation = locations.last
-            print("???? \(locations)")
-            locationManager.stopUpdatingLocation()
-            requestWeatherForLocation()
-        }
-    }
-    
-    
-    
-    func requestWeatherForLocation() {
-        print("requesting")
-        guard let currentLocation = currentLocation else {
+    private func loadWeather(search: String?){
+        guard let search = search else{
             return
         }
         
-        let long = currentLocation.coordinate.longitude
-        let lat = currentLocation.coordinate.latitude
-               
-        
-        print("\(long) \(lat)")
-        
-        let url = "https://api.weatherapi.com/v1/current.json?key=2e5069421ef94f68bc4235330233107&q=\(lat),\(long)"
-        
-        URLSession.shared.dataTask(with: URL(string: url)!,completionHandler: {data, response, error in
-            
-            //validation
-            //convert data to models/some object
-            //update user interface
-            print("here????")
-            guard let data = data, error == nil else {
-                print("something went wrong")
-                return
-            }
-            
-            var json: Weather?
-            do{
-                json = try JSONDecoder().decode(Weather.self, from: data)
-            }
-            catch {
-                print("error \(error)")
-            }
-            
-            guard let result = json else {
-                return
-            }
-            
-            print("result")
-            print(result.current.temp_c)
-        }).resume()
-    }
- 
- 
-    //Table
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        print(models.count)
-//        return models.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        print("table view")
-//        let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath) as! WeatherTableViewCell
-//
-//        cell.configure(with: models[indexPath.row])
-//        return cell
-//    }
-//
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
-        if segue.identifier == "tableSegue"{
-            let destination = segue.destination as! TableViewController
-    //        destination.userId = userId
-    //        destination.email = email
-            destination.tempC = tempC
-            destination.tempF = tempF
-            destination.models = models
+        guard  let url = getURL(query: search) else {
+            print("Could not get URL")
+            return
         }
+        let session = URLSession.shared
+        
+        let dataTask = session.dataTask(with: url) {data, response, error in
+            print("Network call completed")
+            
+            guard error == nil else{
+                print("recieved error")
+                return
+            }
+            guard let data = data else{
+                print("No data found")
+                return
+            }
+            
+            if let weatherResponse = self.parseJson(data: data) {
+                print(weatherResponse.location.name)
+                print(weatherResponse.current.temp_c)
+                print(weatherResponse.current.condition.text)
+//                print(weatherResponse.current.condition.code.image)
+                
+                DispatchQueue.main.sync {
+                    self.cityLabel.text = weatherResponse.location.name
+                    self.tempLabel.text = "\(weatherResponse.current.temp_c)C"
+                    self.weatherConditionLabel.text = weatherResponse.current.condition.text
+//                    self.image1.image = weatherResponse.current.condition.code.image
+                }
+            }
+        }
+        
+        dataTask.resume()
     }
+    
+    
+    
+    private func getURL(query: String) -> URL? {
+        let baseUrl = "https://api.weatherapi.com/v1/"
+        let currentEndpoint = "current.json"
+        let apiKey = "aac7791fc2cf4990914142821221612"
+        guard let url = "\(baseUrl)\(currentEndpoint)?key=\(apiKey)&q=\(query)"
+            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            return nil
+        }
+        print(url)
+        return URL(string: url)
+    }
+    private func parseJson(data: Data) -> weatherResponse? {
+        let decoder = JSONDecoder()
+        var weather: weatherResponse?
+        
+        do{
+            weather = try decoder.decode(weatherResponse.self, from: data)
+        }
+        catch{
+            print("Error decoding")
+        }
+        return weather
+    }
+ 
 
     
 }
 
-struct Weather: Codable {
+struct weatherResponse: Decodable {
     let location: Location
-    let current: Current
+    let current: weather
 }
-
-struct Location: Codable {
-    let lon:  Float
+struct Location: Decodable {
     let name: String
-    let region: String
-    let country: String
 }
-
-struct Current: Codable {
+struct weather: Decodable {
     let temp_c: Float
     let temp_f: Float
-    let condition: Condition
+    let condition: weatherCondition
 }
-
-struct Condition:  Codable {
-    let text: String
-    let code: Int
+struct weatherCondition: Decodable {
+let text: String
 }
-
 

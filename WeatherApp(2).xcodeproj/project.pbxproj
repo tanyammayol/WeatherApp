@@ -16,8 +16,6 @@
 		ABF38EEB2A787D1800918B79 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF38EE92A787D1800918B79 /* WeatherTableViewCell.swift */; };
 		ABF38EEC2A787D1800918B79 /* WeatherTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ABF38EEA2A787D1800918B79 /* WeatherTableViewCell.xib */; };
 		ABF38EF42A79DDAE00918B79 /* Main1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABF38EF22A79DDAE00918B79 /* Main1.storyboard */; };
-		ABF38EF62A7AF71A00918B79 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABF38EF52A7AF71A00918B79 /* TableViewController.swift */; };
-		ABF38EF82A7C781000918B79 /* Main2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABF38EF72A7C781000918B79 /* Main2.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,8 +30,6 @@
 		ABF38EE92A787D1800918B79 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		ABF38EEA2A787D1800918B79 /* WeatherTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeatherTableViewCell.xib; sourceTree = "<group>"; };
 		ABF38EF32A79DDAE00918B79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main1.storyboard; sourceTree = "<group>"; };
-		ABF38EF52A7AF71A00918B79 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
-		ABF38EF72A7C781000918B79 /* Main2.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main2.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,9 +67,7 @@
 				ABF38ED62A787CF500918B79 /* SceneDelegate.swift */,
 				ABF38ED82A787CF500918B79 /* ViewController.swift */,
 				ABF38EF22A79DDAE00918B79 /* Main1.storyboard */,
-				ABF38EF72A7C781000918B79 /* Main2.storyboard */,
 				ABF38EDA2A787CF500918B79 /* Main.storyboard */,
-				ABF38EF52A7AF71A00918B79 /* TableViewController.swift */,
 				ABF38EDD2A787CF600918B79 /* Assets.xcassets */,
 				ABF38EDF2A787CF600918B79 /* LaunchScreen.storyboard */,
 				ABF38EE22A787CF600918B79 /* Info.plist */,
@@ -152,7 +146,6 @@
 				ABF38EEC2A787D1800918B79 /* WeatherTableViewCell.xib in Resources */,
 				ABF38EE12A787CF600918B79 /* LaunchScreen.storyboard in Resources */,
 				ABF38EDE2A787CF600918B79 /* Assets.xcassets in Resources */,
-				ABF38EF82A7C781000918B79 /* Main2.storyboard in Resources */,
 				ABF38EDC2A787CF500918B79 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -167,7 +160,6 @@
 				ABF38EEB2A787D1800918B79 /* WeatherTableViewCell.swift in Sources */,
 				ABF38ED92A787CF500918B79 /* ViewController.swift in Sources */,
 				ABF38ED52A787CF500918B79 /* AppDelegate.swift in Sources */,
-				ABF38EF62A7AF71A00918B79 /* TableViewController.swift in Sources */,
 				ABF38ED72A787CF500918B79 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,6 +322,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -357,6 +350,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
