@@ -204,7 +204,7 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
                         self.tempLabel.text = "\(weatherResponse.current.temp_c)C"
                     }
                     self.weatherConditionLabel.text = weatherResponse.current.condition.text
-                    
+                    self.loadWeatherSymbol(for: weatherResponse.current.condition.text)
 //                    self.image1.image = weatherResponse.current.condition.code.image
                     let existingCity = self.searchedCitiesWeather.first { city in
                                         return city.location.name == weatherResponse.location.name
