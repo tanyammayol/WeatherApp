@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  Weather App
 //
-//  Created by Tanya Marion Mayol on 7/31/23.
+//  Created by Tanya Marion Mayol, Manmohan Singh, Pranav Malhotra on 7/31/23.
 //
 
 import UIKit
@@ -47,24 +47,47 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
     }
     
     @IBAction func currentLocationBtn(_ sender: Any) {
-        locationManager.requestLocation()
+        checkLocationPermission()
             }
+            
+            func checkLocationPermission() {
+                let status = CLLocationManager.authorizationStatus()
+                switch status {
+                case .authorizedAlways, .authorizedWhenInUse:
+                    // Location services authorized, fetch the current location here
+                    locationManager.requestLocation()
+                case .denied, .restricted:
+                    // Location services denied or restricted, show an alert to the user
+                    showLocationPermissionDeniedAlert()
+                case .notDetermined:
+                    // Location permission not determined, request permission
+                    locationManager.requestWhenInUseAuthorization()
+                @unknown default:
+                    // Handle any future authorization status cases
+                    break
+                }
+            }
+
 
             // MARK: - CLLocationManagerDelegate
-
+    func showLocationPermissionDeniedAlert() {
+           let alert = UIAlertController(title: "Location Permission Required", message: "Please go to Settings and allow location access for this app.", preferredStyle: .alert)
+           alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+           present(alert, animated: true, completion: nil)
+       }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        print("Latitude: \(location.coordinate.latitude), Longitude: \(location.coordinate.longitude)")
+           guard let location = locations.last else { return }
+           print("Latitude: \(location.coordinate.latitude), Longitude: \(location.coordinate.longitude)")
 
-        // Fetch weather data using location coordinates
-        loadWeather(search: "\(location.coordinate.latitude),\(location.coordinate.longitude)")
-    }
+           // Fetch weather data using location coordinates
+           loadWeather(search: "\(location.coordinate.latitude),\(location.coordinate.longitude)")
+       }
 
-            func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-                print("Failed to get location: \(error.localizedDescription)")
-            }
+       func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+           print("Failed to get location: \(error.localizedDescription)")
+       }
     
-
+        
     func loadWeatherSymbol(for condition: String) {
         DispatchQueue.main.async {
             let symbolName = self.getWeatherSymbolName(for: condition)
