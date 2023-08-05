@@ -11,7 +11,7 @@ class CitiesListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBOutlet weak var tableView: UITableView!
     var searchedCitiesWeather: [weatherResponse] = []
-    var isFahrenheit = false 
+    public var isFahrenheit = false 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,7 @@ class CitiesListViewController: UIViewController, UITableViewDelegate, UITableVi
         let weatherIconName = getWeatherSymbolName(for: cityWeather.current.condition.text)
                 cell.weatherIcon.image = UIImage(systemName: weatherIconName)
         
-        if cityWeather.isFahrenheit ?? false {
+        if isFahrenheit ?? false {
             cell.temp.text = "\(cityWeather.current.temp_f)°F"
         } else {
             cell.temp.text = "\(cityWeather.current.temp_c)°C"

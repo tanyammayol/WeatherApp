@@ -176,7 +176,7 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
             if segue.identifier == "ShowCitiesListSegue" {
                 if let citiesListVC = segue.destination as? CitiesListViewController {
                     citiesListVC.searchedCitiesWeather = searchedCitiesWeather
-                    
+                    citiesListVC.isFahrenheit = isFahrenheit
                 }
             }
         }
