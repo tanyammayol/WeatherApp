@@ -35,7 +35,7 @@ class CitiesListViewController: UIViewController, UITableViewDelegate, UITableVi
         let weatherIconName = getWeatherSymbolName(for: cityWeather.current.condition.text)
                 cell.weatherIcon.image = UIImage(systemName: weatherIconName)
         
-        if cityWeather.isFahrenheit {
+        if cityWeather.isFahrenheit ?? false {
             cell.temp.text = "\(cityWeather.current.temp_f)°F"
         } else {
             cell.temp.text = "\(cityWeather.current.temp_c)°C"

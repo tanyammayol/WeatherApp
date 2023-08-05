@@ -243,9 +243,11 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
         
         do{
             weather = try decoder.decode(weatherResponse.self, from: data)
+
         }
-        catch{
-            print("Error decoding")
+        catch let error {
+                print("Error decoding JSON: \(error)")
+                return nil
         }
         return weather
     }
@@ -257,8 +259,7 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
 struct weatherResponse: Decodable {
     let location: Location
     let current: weather
-    var isFahrenheit: Bool = false
-    
+    var isFahrenheit: Bool?
 }
 struct Location: Decodable {
     let name: String
