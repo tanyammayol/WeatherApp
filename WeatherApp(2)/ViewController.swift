@@ -153,6 +153,7 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
             if segue.identifier == "ShowCitiesListSegue" {
                 if let citiesListVC = segue.destination as? CitiesListViewController {
                     citiesListVC.searchedCitiesWeather = searchedCitiesWeather
+                    
                 }
             }
         }
@@ -203,6 +204,7 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
                         print(weatherResponse.current.temp_c)
                         self.tempLabel.text = "\(weatherResponse.current.temp_c)C"
                     }
+                    
                     self.weatherConditionLabel.text = weatherResponse.current.condition.text
                     self.loadWeatherSymbol(for: weatherResponse.current.condition.text)
 //                    self.image1.image = weatherResponse.current.condition.code.image
@@ -255,7 +257,8 @@ class ViewController: UIViewController, UITableViewDelegate, CLLocationManagerDe
 struct weatherResponse: Decodable {
     let location: Location
     let current: weather
-    let isFahrenheit: Bool = false
+    var isFahrenheit: Bool = false
+    
 }
 struct Location: Decodable {
     let name: String
